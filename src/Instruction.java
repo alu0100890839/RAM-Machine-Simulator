@@ -55,6 +55,63 @@ public class Instruction {
 	}
 	
 	/**
+	 * Constructor a partir de una línea que la contiene
+	 * @param line linea que contiene a la instruccion
+	 */
+	public Instruction(String line) {
+		line = line.toUpperCase();
+		String[] tokens = line.split("\\s+");
+		
+		analyzeKind(tokens[0]);
+		
+		if(this.kind != null && this.kind!=Kind.HALT) {
+			if(tokens.length == 2) {
+				analyzeAddressing(tokens[1]);
+			}
+			else {
+				this.kind = null;
+			}
+		}
+	}
+	
+	private void analyzeKind(String line) {
+		this.kind = null;
+		for(Kind k : Kind.values()) {
+			if(k.name().equals(line)) {
+				this.kind = k;
+			}
+		}
+	}
+	
+	private void analyzeAddressing(String line) {
+		if(line.charAt(0) == '=') {
+			this.addressing = Addressing.constant;
+			this.operand = line.substring(1);
+		}
+		else if(line.charAt(0) == '*') {
+			this.addressing = Addressing.indirect;
+			this.operand = line.substring(1);
+		}
+		else if(isNumber(line)) {
+			this.addressing = Addressing.direct;
+			this.operand = line;
+		}
+		else {
+			this.addressing = Addressing.tag;
+			this.operand = line;
+		}
+	}
+	
+	private boolean isNumber(String line) {
+		for(int i=0; i < line.length(); i++) {
+			if(line.charAt(i)>'9' || line.charAt(i)<'0') {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * Metodo que decide si una instrucción es válida o no
 	 * @return Devuelve si la instrucción es válida o no
 	 */
@@ -114,5 +171,28 @@ public class Instruction {
 	 */
 	public void setOperand(String operand) {
 		this.operand = operand;
+	}
+	
+	/**
+	 * Metodo para obtener una impresion de la instruccion
+	 * @return La representacion en texto de la instrucción
+	 */
+	public String toString() {
+		if(this.kind==null) {
+			return "NOT VALID INSTRUCTION";
+		}
+		else{
+			String string = this.kind.name();
+			if(this.addressing==Addressing.indirect) {
+				string += " *"+this.operand;
+			}
+			else if(this.addressing==Addressing.constant) {
+				string += " ="+this.operand;
+			}
+			else {
+				string += " "+operand;
+			}
+			return string;
+		}
 	}
 }

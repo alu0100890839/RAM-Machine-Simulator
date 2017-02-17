@@ -3,3 +3,5 @@ TODO
 .settings
 .project
 .classpath
+*.txt
+*prueba*
