@@ -74,9 +74,17 @@ public class ProgramMemory {
 	public String toString() {
 		String string = "PROGRAM MEMORY: \n";
 		for(int i=0; i < instructions.size() ; i++) {
-			string += instructions.get(i).toString();
+			string += instructions.get(i).toString()+"\n";
 		}
 		return string;
+	}
+	
+	/**
+	 * Metodo para resetear la memoria
+	 */
+	public void reset() {
+		instructions = new ArrayList<Instruction>();
+		tagsPositions = new HashMap<String, Integer>();
 	}
 	
 	private String removeBlankSpace(String line) {

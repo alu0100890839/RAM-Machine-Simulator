@@ -59,8 +59,8 @@ public class Instruction {
 	 * @param line linea que contiene a la instruccion
 	 */
 	public Instruction(String line) {
-		line = line.toUpperCase();
 		String[] tokens = line.split("\\s+");
+		tokens[0] = tokens[0].toUpperCase();
 		
 		analyzeKind(tokens[0]);
 		
@@ -105,7 +105,9 @@ public class Instruction {
 	private boolean isNumber(String line) {
 		for(int i=0; i < line.length(); i++) {
 			if(line.charAt(i)>'9' || line.charAt(i)<'0') {
-				return false;
+				if(line.charAt(i)!='-') {
+					return false;
+				}
 			}
 		}
 		return true;
