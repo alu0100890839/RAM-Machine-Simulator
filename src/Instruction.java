@@ -14,7 +14,8 @@ public class Instruction {
 	/**
 	 * Tipos de instrucciones
 	 */
-	public enum Kind {LOAD,
+	public enum Kind {
+		LOAD,
 		STORE,
 		ADD,
 		SUB,
@@ -31,7 +32,8 @@ public class Instruction {
 	/**
 	 * Tipos de direccionamientos
 	 */
-	public enum Addressing {constant,
+	public enum Addressing {
+		constant,
 		direct,
 		indirect,
 		tag,
@@ -124,6 +126,12 @@ public class Instruction {
 		if(this.kind==Kind.READ && addressing==Addressing.constant) {
 			return false;
 		}
+		if(this.kind==Kind.READ && addressing==Addressing.direct && operand.equals("0")) {
+			return false;
+		}
+		if(this.kind==Kind.WRITE && addressing==Addressing.direct && operand.equals("0")) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -191,10 +199,10 @@ public class Instruction {
 			else if(this.addressing==Addressing.constant) {
 				string += " ="+this.operand;
 			}
-			else {
+			else if(this.operand!=null){
 				string += " "+operand;
 			}
 			return string;
 		}
-	}
+	}	
 }

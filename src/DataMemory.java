@@ -1,4 +1,5 @@
 /**
+ * Memoria de datos
  * Pablo Pastor Martín
  * alu0100890839@ull.edu.es
  * 17/02/2017
@@ -57,10 +58,11 @@ public class DataMemory {
 	 * @return La representación en forma de cadena de la memoria
 	 */
 	public String toString() {
-		String string = " INDEX     | VALUE    \n" + 
-						"----------------------\n";
+		String string = "DATA MEMORY:\n"+
+						"INDEX     | VALUE    \n" + 
+						"----------------------";
 		for( Map.Entry<Integer, Integer> cell : memory.entrySet()) {
-			string += String.format("% 10d", cell.getKey()) + string + "|" + String.format("% 10d", cell.getValue()) + "\n";
+			string += "\n" + String.format("% 10d", cell.getKey()) + "|" + String.format("% 10d", cell.getValue()) ;
 		}
 		return string;
 	}

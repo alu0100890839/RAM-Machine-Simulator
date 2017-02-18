@@ -35,7 +35,7 @@ public class ProgramMemory {
 		int instructionsAdded = 0;
 		while(reader.ready()) {
 			String line = removeBlankSpace(reader.readLine());
-			if(!isComment(line) && !line.isEmpty()) {
+			if( !line.isEmpty() && !isComment(line)) {
 				if(containsTag(line)) {
 					tagsPositions.put(getTagName(line), instructionsAdded);
 					line = removeTag(line);
@@ -55,7 +55,16 @@ public class ProgramMemory {
 	 * @return La instruccion buscada
 	 */
 	public Instruction getInstruction(int index) {
-		return instructions.get(index);
+		if(instructions.size() == 0 || index >= instructions.size()) {
+			return null;
+		}
+		Instruction aux = instructions.get(index);
+		if(aux.getKind()==null) {
+			return null;
+		}
+		else {
+			return aux;
+		}
 	}
 	
 	/**
@@ -74,7 +83,7 @@ public class ProgramMemory {
 	public String toString() {
 		String string = "PROGRAM MEMORY: \n";
 		for(int i=0; i < instructions.size() ; i++) {
-			string += instructions.get(i).toString()+"\n";
+			string += instructions.get(i).toString()+"  ["+ i +"]"+"\n";
 		}
 		return string;
 	}

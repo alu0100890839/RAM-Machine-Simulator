@@ -16,7 +16,7 @@ import java.io.FileWriter;
  */
 public class OutputTape {
 	private FileWriter writer;
-	private ArrayList<Character> cinta;
+	private ArrayList<Integer> cinta;
 	
 	/**
 	 * Constructor que crea la cinta a partir de un archivo
@@ -24,26 +24,29 @@ public class OutputTape {
 	 */
 	public OutputTape(String filename) throws IOException{
 		writer = new FileWriter(filename);
-		cinta = new ArrayList<Character>();
+		cinta = new ArrayList<Integer>();
 	}
 	
 	/**
-	 * Método para escribir el siguiente caracter de la lista.
-	 * @param c Carácter a escribir
+	 * Método para escribir el siguiente numero de la lista.
+	 * @param i Número a escribir
 	 * @throws IOException
 	 */
-	public void write(char c) throws IOException{
-		cinta.add(c);
+	public void write(int i) throws IOException{
+		cinta.add(i);
 	}
 	
 	/**
 	 * Cierra la cinta, para volcarla sobre el archivo
 	 */
 	public void close() throws IOException{
+		System.out.println(this);
 		for(int i = 0; i < cinta.size() - 1; i++) {
 			writer.write(cinta.get(i) + "\n");
 		}
-		writer.write(cinta.get(cinta.size()-1));
+		if(cinta.size()>0) {
+			writer.write(cinta.get(cinta.size()-1)+"\n");
+		}
 		writer.close();
 	}
 	
@@ -52,7 +55,7 @@ public class OutputTape {
 	 * @return La cinta impresa
 	 */
 	public String toString() {
-		String salida = "| ";
+		String salida = "OUTPUT TAPE: \n| ";
 		for(int i = 0; i < cinta.size(); i++) {
 			salida += cinta.get(i) + " | ";
 		}

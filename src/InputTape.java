@@ -11,11 +11,11 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 public class InputTape {
 	
-	public static final int NO_CHAR = 65535;  	//Indica que el caracter no es útil
+	public static final int ERROR = 65535;  	//Indica que el caracter no es útil
 	
 	
 	private BufferedReader reader;				//Lector del archivo
-	private ArrayList<Character> cinta;			//Array de caracteres de la cinta
+	private ArrayList<Integer> cinta;			//Array de caracteres de la cinta
 	private int pointerIndex;
 	
 	
@@ -24,13 +24,13 @@ public class InputTape {
 	 * @param filename Cadena que contiene el nombre del archivo de la cinta
 	 */
 	public InputTape(String filename) throws IOException{
-		cinta = new ArrayList<Character>();
+		cinta = new ArrayList<Integer>();
 		pointerIndex = 0;
 		try{
 			reader = new BufferedReader(new FileReader(filename));
 			while(reader.ready()) {
 				String line = reader.readLine();
-				cinta.add(line.charAt(0));
+				cinta.add(Integer.parseInt(line));
 			}
 			
 		}
@@ -40,18 +40,18 @@ public class InputTape {
 	}
 	
 	/**
-	 * Método para leer el siguiente caracter de la lista.
-	 * @return carácter leído
+	 * Método para leer el siguiente número de la lista.
+	 * @return Número leído
 	 * @throws IOException
 	 */
-	public char read() throws IOException{
+	public int read() throws IOException{
 		if(pointerIndex < cinta.size()) {
-			char c = cinta.get(pointerIndex);
+			int c = cinta.get(pointerIndex);
 			pointerIndex++;
 			return c;
 		}
 		else {
-			return (char) -1;
+			return ERROR;
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class InputTape {
 	 * @return La cinta impresa
 	 */
 	public String toString() {
-		String salida = "| ";
+		String salida = "INPUT TAPE \n| ";
 		for(int i = 0; i < cinta.size(); i++) {
 			salida += cinta.get(i) + " | ";
 		}
