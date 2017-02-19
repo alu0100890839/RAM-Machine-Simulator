@@ -19,14 +19,19 @@ public class ram_sim {
 			System.out.println("Comprueba que la invocación sea correcta");
 		}
 		else {
-			AluCu machine;
-			if(args.length==5 && args[4].equals("1")){
-				machine = new AluCu(args[0], args[1], args[2], true);
+			try{
+				AluCu machine;
+				if(args.length==5 && args[4].equals("1")){
+					machine = new AluCu(args[0], args[1], args[2], true);
+				}
+				else {
+					machine = new AluCu(args[0], args[1], args[2], false);
+				}
+				machine.run();
 			}
-			else {
-				machine = new AluCu(args[0], args[1], args[2], false);
+			catch(Exception e){
+				System.out.println("Saliendo del programa por error: " + e.getMessage());
 			}
-			machine.run();
 		}
 	}
 }

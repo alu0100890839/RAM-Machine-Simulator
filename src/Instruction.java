@@ -43,6 +43,7 @@ public class Instruction {
 	private Kind kind;
 	private Addressing addressing;
 	private String operand;
+	private String instructionString;
 	
 	/**
 	 * Constructor a partir de un tipo de instrucción, un direccionamiento y un operando
@@ -54,13 +55,15 @@ public class Instruction {
 		this.kind = kind;
 		this.addressing = addressing;
 		this.operand = operand;
+		this.instructionString = this.toString();
 	}
 	
 	/**
 	 * Constructor a partir de una línea que la contiene
 	 * @param line linea que contiene a la instruccion
 	 */
-	public Instruction(String line) {
+	public Instruction(String line) throws WrongInstruction{
+		this.instructionString = line;
 		String[] tokens = line.split("\\s+");
 		tokens[0] = tokens[0].toUpperCase();
 		
@@ -74,8 +77,23 @@ public class Instruction {
 				this.kind = null;
 			}
 		}
+		if(this.getKind() == null ||!this.isValid()) {
+			throw new WrongInstruction(this);
+		}
 	}
 	
+	/**
+	 * Devuelve la línea que originó la instrucción
+	 * @return la línea que originó la instrucción
+	 */
+	public String getString() {
+		return instructionString;
+	}
+	
+	/**
+	 * Determina el tipo de instrucción
+	 * @param line La línea de la instrucción
+	 */
 	private void analyzeKind(String line) {
 		this.kind = null;
 		for(Kind k : Kind.values()) {
@@ -85,6 +103,10 @@ public class Instruction {
 		}
 	}
 	
+	/**
+	 * Analiza el direccionamiento usado por la instrucción
+	 * @param line Línea que contiene la instrucción
+	 */
 	private void analyzeAddressing(String line) {
 		if(line.charAt(0) == '=') {
 			this.addressing = Addressing.constant;
@@ -104,6 +126,11 @@ public class Instruction {
 		}
 	}
 	
+	/**
+	 * Determina si una cadena contiene un número entero
+	 * @param line la cadena
+	 * @return TRUE si es un número entero
+	 */
 	private boolean isNumber(String line) {
 		for(int i=0; i < line.length(); i++) {
 			if(line.charAt(i)>'9' || line.charAt(i)<'0') {
@@ -189,7 +216,7 @@ public class Instruction {
 	 */
 	public String toString() {
 		if(this.kind==null) {
-			return "NOT VALID INSTRUCTION";
+			return this.instructionString;
 		}
 		else{
 			String string = this.kind.name();

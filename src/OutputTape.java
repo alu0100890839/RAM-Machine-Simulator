@@ -40,7 +40,6 @@ public class OutputTape {
 	 * Cierra la cinta, para volcarla sobre el archivo
 	 */
 	public void close() throws IOException{
-		System.out.println(this);
 		for(int i = 0; i < cinta.size() - 1; i++) {
 			writer.write(cinta.get(i) + "\n");
 		}

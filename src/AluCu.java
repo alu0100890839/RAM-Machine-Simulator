@@ -45,31 +45,41 @@ public class AluCu {
 	public void run() throws IOException{
 		Instruction currentInstruction;
 		while(!stop ) {
-			currentInstruction = program.getInstruction(ip);
-			if(currentInstruction != null && currentInstruction.isValid()) {
-				if(debug) {
-					System.out.println("Instruction: " + program.getInstruction(ip));
-					System.out.println("IP: " + ip);
+			try{
+				currentInstruction = program.getInstruction(ip);
+				if(currentInstruction.isValid()) {
+					if(debug) {
+						System.out.println("Instruction: " + program.getInstruction(ip));
+						System.out.println("IP: " + ip);
+					}
+					runInstruction(currentInstruction);
+					instructionsDone++;
+					if(debug) {
+						System.out.println(data);
+						//System.out.println(program);
+						System.out.println(input);
+						System.out.println(output);
+						System.out.println("Instrucciones realizadas: " + instructionsDone + "\n\n");
+					}
+					ip++;
 				}
-				runInstruction(currentInstruction);
-				instructionsDone++;
-				if(debug) {
-					System.out.println(data);
-					//System.out.println(program);
-					System.out.println(input);
-					System.out.println(output);
-					System.out.println("Instrucciones realizadas: " + instructionsDone + "\n\n");
+				else {
+					stop = true;
 				}
-				ip++;
 			}
-			else {
-				System.out.println(ip);
-				stop = true;
+			catch (NoInstruction e){
+				System.out.println(e.whatsTheProblem());
+				throw new RuntimeException("Acceso a instrucción inexistente");
 			}
 		}
 		output.close();
 	}
 	
+	/**
+	 * Obtiene el operando que usa la instruccion
+	 * @param instruction Instrucción a analizar
+	 * @return El operando
+	 */
 	private int getNumericOperand(Instruction instruction) {
 		switch(instruction.getAddressing()) {
 			case constant:
@@ -86,6 +96,11 @@ public class AluCu {
 		}
 	}
 	
+	/**
+	 * Obtiene el operando que usa la instruccion en caso de que sea de tipo registro
+	 * @param instruction Instrucción a analizar
+	 * @return El operando
+	 */
 	private int getRegisterOperand(Instruction instruction) {
 		switch(instruction.getAddressing()) {
 			case direct:
@@ -97,59 +112,107 @@ public class AluCu {
 		}
 	}
 	
+	/**
+	 * Ejecuta la instrucción LOAD
+	 * @param instruction Instrucción a ejecutar
+	 */
 	private void runLoad(Instruction instruction) {
 		data.set(0, getNumericOperand(instruction));
 	}
 	
+	/**
+	 * Ejecuta la instrucción STORE
+	 * @param instruction Instrucción a ejecutar
+	 */
 	private void runStore(Instruction instruction) {
 		int index = getRegisterOperand(instruction);
 		data.set(index, data.get(0));
 	}
 	
+	/**
+	 * Ejecuta la instrucción ADD
+	 * @param instruction Instrucción a ejecutar
+	 */
 	private void runAdd(Instruction instruction) {
 		int operand = getNumericOperand(instruction);
 		data.set(0, data.get(0) + operand);
 	}
 	
+	/**
+	 * Ejecuta la instrucción SUB
+	 * @param instruction Instrucción a ejecutar
+	 */
 	private void runSub(Instruction instruction) {
 		int operand = getNumericOperand(instruction);
 		data.set(0, data.get(0) - operand);
 	}
 	
+	/**
+	 * Ejecuta la instrucción MUL
+	 * @param instruction Instrucción a ejecutar
+	 */
 	private void runMul(Instruction instruction) {
 		int operand = getNumericOperand(instruction);
 		data.set(0, data.get(0) * operand);
 	}
 	
+	/**
+	 * Ejecuta la instrucción DIV
+	 * @param instruction Instrucción a ejecutar
+	 */
 	private void runDiv(Instruction instruction) {
 		int operand = getNumericOperand(instruction);
 		data.set(0, data.get(0) / operand);
 	}
 	
+	/**
+	 * Ejecuta la instrucción READ
+	 * @param instruction Instrucción a ejecutar
+	 */
 	private void runRead(Instruction instruction) throws IOException{
 		data.set(getRegisterOperand(instruction), input.read());
 	}
 	
+	/**
+	 * Ejecuta la instrucción WRITE
+	 * @param instruction Instrucción a ejecutar
+	 */
 	private void runWrite(Instruction instruction) throws IOException{
 		output.write(getNumericOperand(instruction));
 	}
 	
+	/**
+	 * Ejecuta la instrucción JUMP
+	 * @param instruction Instrucción a ejecutar
+	 */
 	private void runJump(Instruction instruction) {
 		ip = getNumericOperand(instruction)-1;
 	}
 	
+	/**
+	 * Ejecuta la instrucción JZERO
+	 * @param instruction Instrucción a ejecutar
+	 */
 	private void runJzero(Instruction instruction) {
 		if(data.get(0) == 0) {
 			ip = getNumericOperand(instruction)-1;
 		}
 	}
 	
+	/**
+	 * Ejecuta la instrucción JGTZ ejecutar
+	 */
 	private void runJgtz(Instruction instruction) {
 		if(data.get(0) > 0) {
 			ip = getNumericOperand(instruction)-1;
 		}
 	}
 	
+	/**
+	 * Ejecuta una instrucción
+	 * @param instruction Instrucción a ejecutar
+	 * @throws IOException
+	 */
 	private void runInstruction(Instruction instruction) throws IOException{
 		switch(instruction.getKind()) {
 			case LOAD:
