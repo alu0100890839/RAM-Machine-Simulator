@@ -12,7 +12,13 @@
 
 2. **Run**
 
-  ```java -classpath bin ram_sim```
+  ```java -classpath bin ram_sim program.ram input_tape output_rape```
+
+  -program.ram : File that contains the instructions
+
+  -input_tape: File that contains the input tape content
+
+  -output_tape: File that will be used by the simulator to write the output tape content
 
 ## Read the documentation
 

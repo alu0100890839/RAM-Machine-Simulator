@@ -56,7 +56,7 @@ public class AluCu {
 					instructionsDone++;
 					if(debug) {
 						System.out.println(data);
-						//System.out.println(program);
+						System.out.println(program);
 						System.out.println(input);
 						System.out.println(output);
 						System.out.println("Instrucciones realizadas: " + instructionsDone + "\n\n");
@@ -70,6 +70,10 @@ public class AluCu {
 			catch (NoInstruction e){
 				System.out.println(e.whatsTheProblem());
 				throw new RuntimeException("Acceso a instrucción inexistente");
+			}
+			catch(WrongInstruction e) {
+				System.out.println("Fallo en instrucción: " + e.whatsTheProblem() + "(instrucción " + ip+")");
+				throw new RuntimeException("No se puede ejecutar con instrucciones erróneas");
 			}
 		}
 		output.close();

@@ -1,0 +1,30 @@
+          READ 1
+          READ 2
+          LOAD 1
+          SUB =1
+          JGTZ keep
+          JUMP fail
+          
+keep:     LOAD =0
+          STORE 3
+          LOAD 2
+          JGTZ while
+          
+while:    LOAD 2
+          DIV 1
+          STORE 2
+          LOAD 3
+          ADD =1
+          STORE 3
+          LOAD 2
+          DIV 1
+          JGTZ while
+          JUMP end
+          
+fail:     LOAD =-1
+          STORE 3
+          WRITE 3
+          HALT
+          
+end:      WRITE 3
+          HALT

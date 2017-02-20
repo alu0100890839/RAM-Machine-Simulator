@@ -62,7 +62,7 @@ public class Instruction {
 	 * Constructor a partir de una línea que la contiene
 	 * @param line linea que contiene a la instruccion
 	 */
-	public Instruction(String line) throws WrongInstruction{
+	public Instruction(String line) {
 		this.instructionString = line;
 		String[] tokens = line.split("\\s+");
 		tokens[0] = tokens[0].toUpperCase();
@@ -76,9 +76,6 @@ public class Instruction {
 			else {
 				this.kind = null;
 			}
-		}
-		if(this.getKind() == null ||!this.isValid()) {
-			throw new WrongInstruction(this);
 		}
 	}
 	

@@ -41,14 +41,7 @@ public class ProgramMemory {
 					line = removeTag(line);
 				}
 				if(!line.isEmpty()) {
-					try {
-						instructions.add(new Instruction(line));
-					}
-					catch(WrongInstruction e) {
-						System.out.println("Fallo en instrucción: " + e.whatsTheProblem());
-						reader.close();
-						throw new RuntimeException("No se puede ejecutar con instrucciones erróneas");
-					}
+					instructions.add(new Instruction(line));
 					instructionsAdded++;
 				}
 			}
@@ -61,11 +54,15 @@ public class ProgramMemory {
 	 * @param index Número de la instrucción a devolver
 	 * @return La instruccion buscada
 	 */
-	public Instruction getInstruction(int index) throws NoInstruction{
+	public Instruction getInstruction(int index) throws NoInstruction, WrongInstruction{
 		if(instructions.size() == 0 ||index < 0 ||index >= instructions.size()) {
 			throw new NoInstruction(index);
 		}
-		return instructions.get(index);
+		Instruction aux = instructions.get(index);
+		if(aux.getKind()==null || !aux.isValid()) {
+			throw new WrongInstruction(aux);
+		}
+		return aux;
 	}
 	
 	/**
